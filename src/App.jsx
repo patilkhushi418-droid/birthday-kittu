@@ -8,17 +8,16 @@ function App() {
 
   const audioRef = useRef(null);
 
-  const photos = [
-    "/images/photo1.jpeg",
-    "/images/photo2.jpeg",
-    "/images/photo3.jpeg",
-    "/images/photo4.jpeg",
-    "/images/photo5.jpeg",
-    "/images/photo6.jpeg",
-    "/images/photo7.jpeg",
-    "/images/photo8.jpeg",
-  ];
-
+ const photos = [
+  `${import.meta.env.BASE_URL}images/photo1.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo2.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo3.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo4.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo5.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo6.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo7.jpeg`,
+  `${import.meta.env.BASE_URL}images/photo8.jpeg`,
+];
   const captions = [
     ["first of all...", "Look at you being this cute 🥹🎀"],
     ["just saying...", "How are you this adorable without even trying? ♡"],
