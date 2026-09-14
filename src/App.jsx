@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [page, setPage] = useState(1);
   const [photoIndex, setPhotoIndex] = useState(0);
-  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -20,341 +20,279 @@ function App() {
   ];
 
   const captions = [
-   
-  ["first of all...", "Look at you being this cute 🥹🎀"],
-  ["just saying...", "How are you this adorable without even trying? ♡"],
-  ["this one...", "Okay, this smile deserves a little appreciation. 💗"],
-  ["one of my favourites", "Some pictures just make you smile instantly. 🌷"],
-  ["pretty girl energy", "You + KitKat = a love story I could never compete with. 😭🍫🎀"],
-  ["almost there...", "Every picture has a different version of you. 🧸"],
-  ["one more...", "Just you being you — and honestly, that's enough. 🎀"],
-
+    ["first of all...", "Look at you being this cute 🥹🎀"],
+    ["just saying...", "How are you this adorable without even trying? ♡"],
+    ["this one...", "Okay, this smile deserves a little appreciation. 💗"],
+    ["one of my favourites", "Some pictures just make you smile instantly. 🌷"],
+    [
+      "pretty girl energy",
+      "You + KitKat = a love story I could never compete with. 😭🍫🎀",
+    ],
+    ["almost there...", "Every picture has a different version of you. 🧸"],
+    ["one more...", "Just you being you — and honestly, that's enough. 🎀"],
   ];
 
-  const startMusic = async () => {
-    try {
-      await audioRef.current.play();
-      setMusicPlaying(true);
-    } catch (error) {
-      console.log(error);
+  const startMusic = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(
+        `${import.meta.env.BASE_URL}song.mp3`
+      );
+
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.7;
     }
+
+    audioRef.current
+      .play()
+      .then(() => {
+        setIsMusicPlaying(true);
+      })
+      .catch(() => {
+        setIsMusicPlaying(false);
+      });
 
     setPage(2);
   };
 
-  const toggleMusic = async () => {
-    if (!audioRef.current) return;
+  const toggleMusic = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(
+        `${import.meta.env.BASE_URL}song.mp3`
+      );
 
-    if (musicPlaying) {
-      audioRef.current.pause();
-      setMusicPlaying(false);
-    } else {
-      try {
-        await audioRef.current.play();
-        setMusicPlaying(true);
-      } catch (error) {
-        console.log(error);
-      }
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.7;
     }
-  };
 
-  const nextPage = () => {
-    setPage((current) => current + 1);
+    if (isMusicPlaying) {
+      audioRef.current.pause();
+      setIsMusicPlaying(false);
+    } else {
+      audioRef.current
+        .play()
+        .then(() => {
+          setIsMusicPlaying(true);
+        })
+        .catch(() => {
+          setIsMusicPlaying(false);
+        });
+    }
   };
 
   const nextPhoto = () => {
     if (photoIndex < 6) {
-      setPhotoIndex((current) => current + 1);
+      setPhotoIndex(photoIndex + 1);
     } else {
       setPage(5);
     }
   };
 
   const replay = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    setIsMusicPlaying(false);
     setPhotoIndex(0);
     setPage(1);
   };
 
   return (
-    <div className="app">
+    <div className="page">
 
-      <audio ref={audioRef} loop>
-        <source src="/song.mp3" type="audio/mpeg" />
-      </audio>
+      {/* Floating decorations */}
+      <div className="decorations">
+        <span>♡</span>
+        <span>✦</span>
+        <span>♡</span>
+        <span>✧</span>
+        <span>♡</span>
+        <span>✦</span>
+      </div>
 
+      {/* Music button */}
       {page > 1 && (
-        <button className="music-button" onClick={toggleMusic}>
-          {musicPlaying ? "♫" : "♪"}
+        <button
+          className="music-button"
+          onClick={toggleMusic}
+          aria-label="Toggle music"
+        >
+          {isMusicPlaying ? "♫" : "♪"}
         </button>
       )}
 
       {/* PAGE 1 */}
-
       {page === 1 && (
-        <main className="page page-one">
+        <section className="page-one">
+          <p className="small-heading">JUST FOR YOU</p>
 
-          <div className="floating floating-one">♡</div>
-          <div className="floating floating-two">✦</div>
-          <div className="floating floating-three">♡</div>
+          <h1>
+            here is something
+            <br />
+            for u ♡
+          </h1>
 
-          <div className="intro-content">
-
-            <p className="eyebrow">just for you</p>
-
-            <h1>
-              here is something
-              <br />
-              for u <span>♡</span>
-            </h1>
-
-            <p className="intro-subtitle">
-              I hope you like it...
-            </p>
-
-            <button className="main-button" onClick={startMusic}>
-              click here ✨
-            </button>
-
+          <div className="little-text">
+            <span>♡✦♡</span>
+            <p>I hope you like it...</p>
+            <span>made with love ♡</span>
           </div>
 
-          <div className="bottom-note">
-            made with love ♡
-          </div>
-
-        </main>
+          <button className="main-button" onClick={startMusic}>
+            click here ✨
+          </button>
+        </section>
       )}
 
       {/* PAGE 2 */}
-
       {page === 2 && (
-        <main className="page page-two">
+        <section className="page-two">
+          <p className="small-heading">A LITTLE MESSAGE FOR YOU</p>
 
-          <div className="birthday-wrapper">
+          <h1>Happiest birthday to my cutest Kittu 🥹🎀💗</h1>
 
-            <p className="eyebrow">
-              today is all about you ♡
+          <div className="birthday-message">
+            <p>
+              I hope your day is filled with lots and lots of happiness,
+              laughter and all the little things that make you smile. You
+              deserve the happiest days and all the beautiful things life has
+              to offer. 🫶🏻✨
             </p>
 
-            <h1>
-              Happiest birthday to
-              <br />
-              my cutest Kittu 🥹🎀💗
-            </h1>
+            <p>
+              Keep smiling, keep being your adorable self, and never change!
+              🥺💞 Here’s to more memories, more laughs, more bakchodi and
+              countless happy moments together. 🎂🌷
+            </p>
 
-            <div className="divider">♡</div>
-
-            <div className="birthday-message">
-
-              <p>
-                I hope your day is filled with lots and lots of
-                happiness, laughter and all the little things that
-                make you smile. You deserve the happiest days and
-                all the beautiful things life has to offer. 🫶🏻✨
-              </p>
-
-              <p>
-                Keep smiling, keep being your adorable self, and
-                never change! 🥺💞 Here’s to more memories, more
-                laughs, more bakchodi and countless happy moments
-                together. 🎂🌷
-              </p>
-
-              <p>
-                Happy Birthday once again, Kittu! 🧸🎀💗
-              </p>
-
-            </div>
-
-            <button className="main-button" onClick={nextPage}>
-              but wait... ♡
-            </button>
-
+            <p>
+              Happy Birthday once again, Kittu! 🧸🎀💗
+            </p>
           </div>
 
-        </main>
+          <button
+            className="main-button"
+            onClick={() => setPage(3)}
+          >
+            there's more ♡
+          </button>
+        </section>
       )}
 
       {/* PAGE 3 */}
-
       {page === 3 && (
-        <main className="page page-three">
+        <section className="page-three">
+          <p className="small-heading">A FEW THINGS I WANNA SAY</p>
 
-          <div className="transition-content">
+          <h1>Just You Being You ♡</h1>
 
-            <div className="big-sparkle">✦</div>
+          <p className="transition-text">
+            okay... enough of the words.
+            <br />
+            let's look at you being adorable instead 🥹🎀
+          </p>
 
-            <p className="eyebrow">
-              because one message wasn't enough
-            </p>
-
-            <h1>
-              I made a little
-              <br />
-              something else <span>♡</span>
-            </h1>
-
-            <p className="transition-text">
-              A few pictures.
-              <br />
-              A few thoughts.
-              <br />
-              And a lot of love.
-            </p>
-
-            <button className="main-button" onClick={() => setPage(4)}>
-              show me ♡
-            </button>
-
-          </div>
-
-        </main>
+          <button
+            className="main-button"
+            onClick={() => setPage(4)}
+          >
+            show me ♡
+          </button>
+        </section>
       )}
 
-      {/* PAGE 4 */}
-
+      {/* PAGE 4 — PHOTO SEQUENCE */}
       {page === 4 && (
-        <main className="page page-four">
+        <section className="page-four">
 
-          <div className="memory-section">
+          <div className="photo-progress">
+            {photoIndex + 1} / 7
+          </div>
 
-            <div className="memory-header">
+          <div className="photo-card">
 
-              <p className="eyebrow">
-                a little collection
-              </p>
-
-              <h1>
-                Just You Being You ♡
-              </h1>
-
-              <div className="progress">
-                <span>
-                  {String(photoIndex + 1).padStart(2, "0")}
-                </span>
-
-                <div className="progress-line">
-                  <div
-                    style={{
-                      width: `${((photoIndex + 1) / 7) * 100}%`,
-                    }}
-                  />
-                </div>
-
-                <span>07</span>
-              </div>
-
+            <div className="photo-frame">
+              <img
+                src={photos[photoIndex]}
+                alt={`Kittu memory ${photoIndex + 1}`}
+              />
             </div>
 
-            <div className="photo-area" onClick={nextPhoto}>
+            <div className="photo-caption">
+              <p className="caption-small">
+                {captions[photoIndex][0]}
+              </p>
 
-              <div className={`photo-card photo-card-${photoIndex % 4}`}>
-
-                <div className="photo-number">
-                  {String(photoIndex + 1).padStart(2, "0")}
-                </div>
-
-                <img
-                  src={photos[photoIndex]}
-                  alt="Birthday memory"
-                />
-
-              </div>
-
-              <div className="caption-area">
-
-                <p className="caption-small">
-                  {captions[photoIndex][0]}
-                </p>
-
-                <h2>
-                  {captions[photoIndex][1]}
-                </h2>
-
-                <div className="tap-next">
-                  tap the photo →
-                </div>
-
-              </div>
-
+              <h2>
+                {captions[photoIndex][1]}
+              </h2>
             </div>
 
           </div>
 
-        </main>
+          <button
+            className="main-button"
+            onClick={nextPhoto}
+          >
+            {photoIndex === 6 ? "one last thing ♡" : "next ♡"}
+          </button>
+
+        </section>
       )}
 
-      {/* PAGE 5 */}
-
+      {/* PAGE 5 — FINAL PHOTO + MESSAGE */}
       {page === 5 && (
-        <main className="page page-five">
+        <section className="page-five">
 
-          <div className="final-wrapper">
+          <p className="small-heading">okay... one last thing</p>
 
-            <p className="eyebrow">
-              okay... one last thing ♡
-            </p>
-
-            <h1 className="final-title">
-              Happy Birthday,
-              <br />
-              Kittu 🎀
-            </h1>
-
-            <div className="final-photo-wrapper">
-
-              <div className="final-photo">
-                <img
-                  src={photos[7]}
-                  alt="Kittu"
-                />
-              </div>
-
-            </div>
-
-            <div className="final-message">
-
-              <p>
-                Here’s to another year of you,
-                more laughs, more memories,
-                more bakchodi and lots and lots
-                of happiness. 💗
-              </p>
-
-              <p>
-                I hope this year brings you everything
-                you’re wishing for and so much more.
-              </p>
-
-              <strong>
-                Stay exactly the way you are. ♡
-              </strong>
-
-            </div>
-
-            <div className="final-collage">
-
-              {photos.map((photo, index) => (
-                <div
-                  className={`collage-photo collage-${index}`}
-                  key={index}
-                >
-                  <img src={photo} alt="" />
-                </div>
-              ))}
-
-            </div>
-
-            <p className="made-with-love">
-              made especially for you ♡
-            </p>
-
-            <button className="replay-button" onClick={replay}>
-              replay ↻
-            </button>
-
+          <div className="final-photo-card">
+            <img
+              src={photos[7]}
+              alt="Kittu special memory"
+            />
           </div>
 
-        </main>
+          <h1>And this one deserves a special place. 🥹🎀</h1>
+
+          <p className="final-message">
+            Because after all the pictures, all the memories and all the
+            bakchodi...
+            <br />
+            you're still just my cutest Kittu. 🧸💗
+          </p>
+
+          <p className="final-birthday">
+            Happiest Birthday once again! 🎂🎀
+          </p>
+
+          <div className="final-collage">
+            {photos.map((photo, index) => (
+              <div
+                className="collage-photo"
+                key={photo}
+              >
+                <img
+                  src={photo}
+                  alt={`Memory ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+
+          <p className="ending-text">
+            made with a little bit of love, lots of memories &lt;3
+          </p>
+
+          <button
+            className="main-button"
+            onClick={replay}
+          >
+            replay ♡
+          </button>
+
+        </section>
       )}
 
     </div>
